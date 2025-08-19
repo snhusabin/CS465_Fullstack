@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TripCardComponent } from '../trip-card/trip-card.component';
 import { TripDataService } from '../services/trip-data.service';
 import { Trip } from '../models/trip';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trip-listing',
@@ -11,7 +11,7 @@ import { Router } from '@angular/router'
   imports: [CommonModule, TripCardComponent],
   templateUrl: './trip-listing.component.html',
   styleUrls: ['./trip-listing.component.css'],
-  providers: [TripDataService]
+  // providers: [TripDataService] // 
 })
 export class TripListingComponent implements OnInit {
   trips: Trip[] = [];
@@ -23,33 +23,32 @@ export class TripListingComponent implements OnInit {
   ) {
     console.log('trip-listing constructor');
   }
-  
+
   public addTrip(): void {
     this.router.navigate(['add-trip']);
   }
 
-
- 
-
-  private getStuff(): void {
+  private getTrips(): void { // Renamed for clarity
+    this.message = 'Searching for trips...';
     this.tripDataService.getTrips().subscribe({
-      next: (value: any) => {
+      next: (value: Trip[]) => {
         this.trips = value;
         if (value.length > 0) {
-          this.message = 'There are ' + value.length + ' trips available.';
+          this.message = `There are ${value.length} trips available.`;
         } else {
           this.message = 'There were no trips retrieved from the database';
         }
         console.log(this.message);
       },
       error: (error: any) => {
-        console.log('Error: ' + error);
+        console.error('Error fetching trips:', error);
+        this.message = 'Error fetching trips.';
       }
     });
   }
 
   ngOnInit(): void {
     console.log('ngOnInit');
-    this.getStuff();
+    this.getTrips();
   }
 }

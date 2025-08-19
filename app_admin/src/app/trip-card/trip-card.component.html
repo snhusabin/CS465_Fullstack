@@ -12,7 +12,8 @@
 
         </p>
         <div>
-            <button (click)="editTrip(trip)" class="btn btn-info">Edit Trip</button>
+        <!-- <button (click)="editTrip(trip)" class="btn btn-info">Edit Trip</button> -->
+        <button *ngIf="isLoggedIn()" class="btn btn-sm btn-secondary" (click)="onEditTrip(trip)">Edit</button>
         </div>
     </div>
 </div>
